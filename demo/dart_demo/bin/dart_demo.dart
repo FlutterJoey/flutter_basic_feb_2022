@@ -1,6 +1,6 @@
-import 'test.dart';
+import '../src/test.dart';
 
-export 'test.dart' hide test;
+export '../src/test.dart' hide test;
 
 void main(List<String> arguments) {
   int age = 27;
