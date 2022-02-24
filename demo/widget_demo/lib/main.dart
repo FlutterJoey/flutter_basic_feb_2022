@@ -1,9 +1,11 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:widget_demo/src/country_card.dart';
 
 void main() async {
-  runApp(MyApp(
-    color: Colors.blueGrey.shade200,
+  runApp(const MyApp(
+    color: Colors.blue,
   ));
 }
 
@@ -22,6 +24,22 @@ class MyApp extends StatefulWidget {
 class _MyAppState extends State<MyApp> {
   bool isVisible = true;
 
+  late Color stateColor;
+
+  late GlobalKey<CountryCardState> cardKey;
+
+  @override
+  void initState() {
+    super.initState();
+    cardKey = GlobalKey();
+    stateColor = widget.color;
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -30,29 +48,27 @@ class _MyAppState extends State<MyApp> {
           fontSize: 20,
         ),
         child: Container(
-          color: widget.color,
+          color: stateColor,
           child: Column(
             children: [
-              Spacer(
+              const Spacer(
                 flex: 2,
               ),
               if (isVisible) ...[
-                const Center(
-                  child: CountryCard(),
+                Center(
+                  child: CountryCard(key: cardKey,),
                 ),
-                Spacer(
+                const Spacer(
                   flex: 1,
                 ),
               ],
               ElevatedButton(
                 onPressed: () {
-                  setState(() {
-                    isVisible = !isVisible;
-                  });
+                  cardKey.currentState?.select();
                 },
-                child: Text('Klik hier!'),
+                child: const Text('Klik hier!'),
               ),
-              Spacer(
+              const Spacer(
                 flex: 2,
               ),
             ],
