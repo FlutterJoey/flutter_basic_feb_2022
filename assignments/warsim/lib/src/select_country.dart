@@ -86,25 +86,29 @@ class _SelectCountryScreenState extends State<SelectCountryScreen> {
                 pageController: countryBController,
               ),
             ),
-            Expanded(
-              child: ElevatedButton(
-                onPressed: () {
-                  var invaderName = countryA;
-                  var defenderName = countryB;
-                  if (invaderName != null && defenderName != null) {
-                    Navigator.of(context).push(
-                      MaterialPageRoute(
-                        builder: (context) => SimulationScreen(
-                          invader: createCountry(invaderName, aTroups),
-                          defender: createCountry(defenderName, bTroups),
+            if (countryA != null && countryB != null) ...[
+              Expanded(
+                child: ElevatedButton(
+                  onPressed: () {
+                    var invaderName = countryA;
+                    var defenderName = countryB;
+                    if (invaderName != null && defenderName != null) {
+                      Navigator.of(context).push(
+                        MaterialPageRoute(
+                          builder: (context) => SimulationScreen(
+                            invader: createCountry(invaderName, aTroups),
+                            defender: createCountry(defenderName, bTroups),
+                          ),
                         ),
-                      ),
-                    );
-                  }
-                },
-                child: Text('Start'),
+                      );
+                    }
+                  },
+                  child: const Text('Start'),
+                ),
               ),
-            )
+            ] else ...[
+              const Spacer(),
+            ],
           ],
         ),
       ),
@@ -172,11 +176,39 @@ class CountrySelector extends StatelessWidget {
         if (selected != null) ...[
           Expanded(
             child: Padding(
-              padding: EdgeInsets.all(32),
+              padding: const EdgeInsets.all(32),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  IconButton(
+                    onPressed: () {
+                      onSetTroups(troups + 1);
+                    },
+                    icon: const Icon(
+                      Icons.add,
+                    ),
+                  ),
+                  Text(
+                    '$troups',
+                    style: Theme.of(context).textTheme.displaySmall,
+                  ),
+                  IconButton(
+                    onPressed: () {
+                      if (troups > 1) {
+                        onSetTroups(troups - 1);
+                      }
+                    },
+                    icon: const Icon(
+                      Icons.remove,
+                    ),
+                  ),
+                ],
+              ),
             ),
           ),
-        ] else
-          ...[]
+        ] else ...[
+          const Spacer(),
+        ]
       ],
     );
   }
@@ -199,19 +231,20 @@ class CountryPage extends StatelessWidget {
   Widget build(BuildContext context) {
     var textTheme = Theme.of(context).textTheme;
     return Container(
-      padding: EdgeInsets.all(10),
+      padding: const EdgeInsets.all(10),
       child: Column(
         children: [
           Text(
             country,
             style: textTheme.displaySmall,
+            softWrap: false,
           ),
           if (!selected) ...[
             ElevatedButton(
               onPressed: () {
                 onSelect.call(country);
               },
-              child: Text('Select'),
+              child: const Text('Select'),
             ),
           ],
         ],
