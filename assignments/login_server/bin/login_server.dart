@@ -5,9 +5,7 @@ import 'package:shelf/shelf.dart';
 import 'package:shelf/shelf_io.dart' as shelf_io;
 
 void main(List<String> arguments) async {
-  var handler = const Pipeline()
-      .addMiddleware(logRequests())
-      .addHandler(login);
+  var handler = const Pipeline().addMiddleware(logRequests()).addHandler(login);
 
   var shelf = await shelf_io.serve(handler, '127.0.0.1', 8081);
 
@@ -17,7 +15,7 @@ void main(List<String> arguments) async {
 }
 
 Future<Response> login(Request request) async {
-  if (request.method == 'POST' && request.url.path == '/login') {
+  if (request.method == 'POST' && request.url.path == 'login') {
     var body = await request.readAsString();
     try {
       var json = jsonDecode(body);
@@ -25,9 +23,9 @@ Future<Response> login(Request request) async {
       String password = json['password'];
 
       if (username == 'test' && password == 'test') {
-        return Response.ok({
+        return Response.ok(jsonEncode({
           'token': 'some token you can save',
-        });
+        }));
       } else {
         return Response.forbidden('Invalid username or password');
       }
