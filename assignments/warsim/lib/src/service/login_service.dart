@@ -1,9 +1,13 @@
 import 'dart:convert';
 
 import 'package:http/http.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class LoginService {
   String latestError = '';
+  String _token = '';
+
+  Future<SharedPreferences> get _prefs => SharedPreferences.getInstance();
 
   Future<bool> login(String username, String password) async {
     var client = Client();
@@ -20,7 +24,7 @@ class LoginService {
       );
       if (response.statusCode == 200) {
         var json = jsonDecode(response.body);
-        print(json['token']);
+        _saveToken(json['token']);
         return true;
       } else {
         latestError = response.body;
@@ -31,5 +35,30 @@ class LoginService {
     } finally {
       client.close();
     }
+  }
+
+  static const tokenKey = 'token';
+
+  Future<bool> doLoginCheck() async {
+    var prefs = await _prefs;
+    var token = prefs.getString(tokenKey);
+    if (token != null) {
+      _token = token;
+      return true;
+    } else {
+      return false;
+    }
+  }
+
+  Future<void> _saveToken(String token) async {
+    var prefs = await _prefs;
+    _token = token;
+    prefs.setString(tokenKey, token);
+  }
+
+  void logout() async {
+    _token = '';
+    var prefs = await _prefs;
+    prefs.remove(tokenKey);
   }
 }

@@ -6,6 +6,7 @@ import 'package:provider/provider.dart';
 import 'package:warsim/src/login_screen.dart';
 import 'package:warsim/src/select_country.dart';
 import 'package:warsim/src/service/login_service.dart';
+import 'package:warsim/src/splash.dart';
 
 class App extends StatelessWidget {
   const App({Key? key}) : super(key: key);
@@ -18,7 +19,7 @@ class App extends StatelessWidget {
         theme: ThemeData(
           primarySwatch: Colors.blueGrey,
         ),
-        home: const LoginScreen(),
+        home: const SplashScreen(),
       ),
     );
   }
