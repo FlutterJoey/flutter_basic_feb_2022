@@ -20,68 +20,84 @@ class _LoginScreenState extends State<LoginScreen> {
     return Scaffold(
       resizeToAvoidBottomInset: false,
       appBar: AppBar(
-        title: Text('login'),
+        title: const Text('login'),
       ),
       body: Form(
         key: _formKey,
-        child: Column(
-          children: [
-            if (error != null) ...[
-              Text(error!),
+        child: Container(
+          margin: const EdgeInsets.all(40),
+          padding: const EdgeInsets.all(24),
+          decoration: BoxDecoration(
+            color: Theme.of(context).colorScheme.onSecondary,
+            borderRadius: BorderRadius.circular(16),
+            boxShadow: const [
+              BoxShadow(
+                color: Colors.black38,
+                blurRadius: 10,
+              )
             ],
-            TextFormField(
-              decoration: InputDecoration(
-                label: Text('username'),
-              ),
-              validator: (String? value) {
-                if (value?.isEmpty ?? true) {
-                  return 'You need to enter a username';
-                }
-                return null;
-              },
-              onSaved: (String? value) {
-                if (value != null) {
-                  username = value;
-                }
-              },
-            ),
-            TextFormField(
-              obscureText: true,
-              validator: (value) {
-                if (value?.isEmpty ?? true) {
-                  return 'You need to enter a password';
-                }
-                return null;
-              },
-              onSaved: (String? value) {
-                if (value != null) {
-                  password = value;
-                }
-              },
-            ),
-            ElevatedButton(
-              onPressed: () {
-                var form = _formKey.currentState;
-                if (form != null && form.validate()) {
-                  _formKey.currentState?.save();
-                  if (username == 'test' && password == 'test') {
-                    Navigator.of(context).pushReplacement(
-                      MaterialPageRoute(
-                        builder: (context) => SelectCountryScreen(),
-                      ),
-                    );
-                  } else {
-                    setState(() {
-                      error = 'Invalid username or password';
-                    });
+          ),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              if (error != null) ...[
+                Text(error!),
+              ],
+              TextFormField(
+                decoration: const InputDecoration(
+                  label: Text('username'),
+                ),
+                validator: (String? value) {
+                  if (value?.isEmpty ?? true) {
+                    return 'You need to enter a username';
                   }
-                }
-              },
-              child: Text('Login'),
-            ),
-            Spacer(),
-            IconButton(onPressed: () {}, icon: Icon(Icons.abc_sharp))
-          ],
+                  return null;
+                },
+                onSaved: (String? value) {
+                  if (value != null) {
+                    username = value;
+                  }
+                },
+              ),
+              TextFormField(
+                obscureText: true,
+                validator: (value) {
+                  if (value?.isEmpty ?? true) {
+                    return 'You need to enter a password';
+                  }
+                  return null;
+                },
+                onSaved: (String? value) {
+                  if (value != null) {
+                    password = value;
+                  }
+                },
+              ),
+              Padding(
+                padding: const EdgeInsets.all(16.0),
+                child: ElevatedButton(
+                  onPressed: () {
+                    var form = _formKey.currentState;
+                    if (form != null && form.validate()) {
+                      form.save();
+                      if (username == 'test' && password == 'test') {
+                        Navigator.of(context).pushReplacement(
+                          MaterialPageRoute(
+                            builder: (context) => SelectCountryScreen(),
+                          ),
+                        );
+                      } else {
+                        setState(() {
+                          error = 'Invalid username or password';
+                        });
+                      }
+                    }
+                  },
+                  child: Text('Login'),
+                ),
+              ),
+            ],
+          ),
         ),
       ),
     );

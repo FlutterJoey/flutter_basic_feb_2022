@@ -26,7 +26,7 @@ class _SelectCountryScreenState extends State<SelectCountryScreen> {
     'Nederland',
     'Duitsland',
     'Belgie',
-    'Verenigde Staten',
+    'Amerika',
     'Rusland',
     'China',
   ];
