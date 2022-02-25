@@ -31,7 +31,6 @@ class BackendProvider extends StatefulWidget {
         .dependOnInheritedWidgetOfExactType<InheritedProvider>()
         ?._state
         .backend;
-    return backend!;
     if (backend != null) {
       return backend;
     }
