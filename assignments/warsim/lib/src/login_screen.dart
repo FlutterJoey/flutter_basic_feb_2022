@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:warsim/src/select_country.dart';
+import 'package:warsim/src/service/login_service.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({Key? key}) : super(key: key);
@@ -15,6 +17,7 @@ class _LoginScreenState extends State<LoginScreen> {
   String password = '';
 
   final GlobalKey<FormState> _formKey = GlobalKey();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -76,11 +79,13 @@ class _LoginScreenState extends State<LoginScreen> {
               Padding(
                 padding: const EdgeInsets.all(16.0),
                 child: ElevatedButton(
-                  onPressed: () {
+                  onPressed: () async {
                     var form = _formKey.currentState;
                     if (form != null && form.validate()) {
                       form.save();
-                      if (username == 'test' && password == 'test') {
+                      if (await context
+                          .read<LoginService>()
+                          .login(username, password)) {
                         Navigator.of(context).pushReplacement(
                           MaterialPageRoute(
                             builder: (context) => SelectCountryScreen(),
@@ -88,7 +93,10 @@ class _LoginScreenState extends State<LoginScreen> {
                         );
                       } else {
                         setState(() {
-                          error = 'Invalid username or password';
+                          error = context.read<LoginService>().latestError;
+                          if (error?.isEmpty ?? true) {
+                            error = null;
+                          }
                         });
                       }
                     }
