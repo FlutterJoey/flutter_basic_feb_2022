@@ -5,7 +5,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 class LoginService {
   String latestError = '';
-  String _token = '';
+  String token = '';
 
   Future<SharedPreferences> get _prefs => SharedPreferences.getInstance();
 
@@ -43,7 +43,7 @@ class LoginService {
     var prefs = await _prefs;
     var token = prefs.getString(tokenKey);
     if (token != null) {
-      _token = token;
+      this.token = token;
       return true;
     } else {
       return false;
@@ -52,12 +52,12 @@ class LoginService {
 
   Future<void> _saveToken(String token) async {
     var prefs = await _prefs;
-    _token = token;
+    this.token = token;
     prefs.setString(tokenKey, token);
   }
 
-  void logout() async {
-    _token = '';
+  Future<void> logout() async {
+    token = '';
     var prefs = await _prefs;
     prefs.remove(tokenKey);
   }

@@ -40,6 +40,7 @@ dependencies:
   shared_preferences: ^2.0.13
 
 dev_dependencies:
+  mocktail: ^0.2.0
   flutter_test:
     sdk: flutter
 

@@ -94,6 +94,7 @@ class _LoginScreenState extends State<LoginScreen> {
                       } else {
                         setState(() {
                           error = context.read<LoginService>().latestError;
+                          
                           if (error?.isEmpty ?? true) {
                             error = null;
                           }
